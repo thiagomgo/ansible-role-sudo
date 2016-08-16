@@ -1,4 +1,6 @@
-# **Sudo**
+# **Ansible Role: Sudo**
+
+[![Build Status](https://api.travis-ci.org/thiagomgo/ansible-role-sudo.svg?branch=master)](https://travis-ci.org/thiagomgo/ansible-role-sudo)
 
 This role installs sudo and configure it by user.
 
