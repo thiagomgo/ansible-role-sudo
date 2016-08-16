@@ -8,7 +8,7 @@
 
     sudo: true
     sudo_user:
-      - username
+      - root
 
   roles:
     - ansible-role-sudo
