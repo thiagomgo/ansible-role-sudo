@@ -2,7 +2,7 @@
 
 # Playbook used to manage sudoers
 
-- hosts: localhost
+- hosts: all
 
   vars:
 
