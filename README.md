@@ -3,12 +3,10 @@
 This role installs sudo and configure it by user.
 
 ## Requirements
-------------
 
 None.
 
 ## Role Variables
---------------
 
 Here is a list of all the default variables for this role, which are also available in `defaults/main.yml`.
 
@@ -27,12 +25,10 @@ sudo_user: []
 ```
 
 ## Dependencies
-------------
 
 * Ansible >= 1.9
 
 ## Example Playbook
-----------------
 
 ```yaml
 ---
@@ -49,13 +45,12 @@ sudo_user: []
 ```
 
 ## License
--------
 
 BSD
 
 ## Author Information
--------
 
-Thiago Gomes <thiago.mgomes [at] gmail.com>
+Thiago Gomes
+- thiago.mgomes [at] gmail.com
 
 
