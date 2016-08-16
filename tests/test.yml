@@ -3,12 +3,12 @@
 # Playbook used to manage sudoers
 
 - hosts: localhost
-  remote_user: root
+
   vars:
 
-  sudo: true
-  sudo_user:
-    - tgomes
+    sudo: true
+    sudo_user:
+      - username
 
   roles:
     - ansible-role-sudo
