@@ -15,3 +15,9 @@ install:
 
 script:
   - ansible-playbook --syntax-check tests/test.yml
+  - ansible-playbook --sudo -v --diff tests/role.yml
+  - >
+    ansible-playbook --sudo tests/test.yml
+    | grep -q 'changed=0.*failed=0'
+    && (echo 'Idempotence test: pass' && exit 0)
+    || (echo 'Idempotence test: fail' && exit 1)

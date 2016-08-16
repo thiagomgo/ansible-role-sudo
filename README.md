@@ -38,7 +38,7 @@ sudo_user: []
 - hosts: all
 
   vars:
-    sudo: true|false
+    sudo: true
     sudo_user:
       - username
 
