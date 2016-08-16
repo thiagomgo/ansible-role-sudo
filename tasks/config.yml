@@ -1,0 +1,27 @@
+---
+
+- name: sudo | check directory /etc/sudoers.d
+  file:
+    path: /etc/sudoers.d
+    state: directory
+    mode: "0750"
+
+- name: sudo | create sudoers configuration under /etc/sudoers.d
+  template:
+    src: "sudo-users.j2"
+    dest: "/etc/sudoers.d/{{ item }}"
+    validate: "/usr/sbin/visudo -csf %s"
+    owner: root
+    group: root
+    mode: "0440"
+  when: sudo is defined and sudo == true
+  with_items:
+    - "{{ sudo_user }}"
+
+- name: sudo | remove sudoers configuration under /etc/sudoers.d
+  file:
+    path: "/etc/sudoers.d/{{ item }}"
+    state: absent
+  when: sudo is defined and sudo == false
+  with_items:
+  - "{{ sudo_user }}"

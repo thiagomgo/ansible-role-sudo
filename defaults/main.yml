@@ -1,0 +1,10 @@
+---
+
+# enable sudo
+sudo: true
+
+# package name (version)
+sudo_package: sudo
+
+# username
+sudo_user: []
