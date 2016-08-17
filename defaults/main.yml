@@ -6,5 +6,5 @@ sudo: true
 # package name (version)
 sudo_package: sudo
 
-# username
+# array of users to add
 sudo_user: []
