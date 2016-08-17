@@ -1,4 +1,4 @@
 # {{ ansible_managed }}
 
-Defaults:{{ sudo_user }} !requiretty
-{{ sudo_user }}        ALL=(ALL)       NOPASSWD: ALL
+Defaults:"{{ sudo_user }}" !requiretty
+"{{ sudo_user }}"        ALL=(ALL)       NOPASSWD: ALL
