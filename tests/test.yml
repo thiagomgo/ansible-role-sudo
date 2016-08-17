@@ -6,9 +6,8 @@
   connection: local
 
   vars:
-    sudo: false
-    sudo_user:
-      - root
+    sudo: true
+    sudo_user: travis
 
   roles:
     - ansible-role-sudo
