@@ -28,7 +28,7 @@ sudo_user: []
 
 ## Dependencies
 
-* Ansible >= 1.9
+None
 
 ## Example Playbook
 
@@ -48,11 +48,9 @@ sudo_user: []
 
 ## License
 
-BSD
+MIT / BSD
 
 ## Author Information
 
 Thiago Gomes
 - thiago.mgomes [at] gmail.com
-
-
