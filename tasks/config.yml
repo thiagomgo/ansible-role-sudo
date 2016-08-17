@@ -4,6 +4,8 @@
   file:
     path: /etc/sudoers.d
     state: directory
+    owner: root
+    group: root
   tags:
     - check
 
@@ -14,7 +16,7 @@
     validate: "/usr/sbin/visudo -csf %s"
     owner: root
     group: root
-    mode: "0440"
+    mode: 0440
   when: sudo is defined and sudo == true
   with_items:
     - "{{ sudo_user }}"
