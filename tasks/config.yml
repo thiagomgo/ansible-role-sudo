@@ -4,7 +4,6 @@
   file:
     path: /etc/sudoers.d
     state: directory
-    mode: "0750"
   tags:
     - check
 
