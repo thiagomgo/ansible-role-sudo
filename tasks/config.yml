@@ -5,6 +5,8 @@
     path: /etc/sudoers.d
     state: directory
     mode: "0750"
+  tags:
+    - check
 
 - name: sudo | create sudoers configuration under /etc/sudoers.d
   template:
@@ -17,6 +19,9 @@
   when: sudo is defined and sudo == true
   with_items:
     - "{{ sudo_user }}"
+  tags:
+    - install
+    - configuration
 
 - name: sudo | remove sudoers configuration under /etc/sudoers.d
   file:
@@ -25,3 +30,6 @@
   when: sudo is defined and sudo == false
   with_items:
   - "{{ sudo_user }}"
+  tags:
+    - remove
+    - configuration
