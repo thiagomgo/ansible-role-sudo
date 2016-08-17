@@ -1,6 +1,6 @@
 ---
 
-# Playbook used to manage sudoers
+# Test file for sudo
 
 - hosts: all
 

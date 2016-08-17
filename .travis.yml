@@ -3,7 +3,11 @@ language: python
 python: "2.7"
 
 # Use the new container infrastructure
-sudo: true
+sudo: required
+
+branches:
+  only:
+    - master
 
 # Install ansible
 addons:
@@ -27,7 +31,7 @@ script:
   - ansible-playbook tests/test.yml -i tests/inventory --syntax-check
 
   # Run the role/playbook with ansible-playbook.
-  - ansible-playbook --sudo tests/test.yml
+  - ansible-playbook --sudo tests/test.yml -vvvv
 
   # Run the role/playbook again, checking to make sure it's idempotent
   - >
@@ -37,4 +41,5 @@ script:
       || (echo 'Idempotence test: fail' && exit 1)
 
 notifications:
+  email: false
   webhooks: https://galaxy.ansible.com/api/v1/notifications/
