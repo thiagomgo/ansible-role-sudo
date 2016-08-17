@@ -3,9 +3,9 @@
 # Test file for sudo
 
 - hosts: all
+  connection: local
 
   vars:
-
     sudo: false
     sudo_user:
       - root
