@@ -7,7 +7,7 @@
 
   vars:
     sudo: true
-    sudo_user: travis
+    sudo_user: root
 
   roles:
     - ansible-role-sudo

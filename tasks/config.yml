@@ -6,6 +6,7 @@
     state: directory
     owner: root
     group: root
+    mode: 0750
   tags:
     - check
 
