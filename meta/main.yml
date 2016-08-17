@@ -3,7 +3,7 @@ galaxy_info:
   description: An simple ansible role to manage sudo users
   company:
   license: "license (BSD, MIT)"
-  min_ansible_version: 1.7
+  min_ansible_version: 1.8
   platforms:
     - name: EL
       versions:
