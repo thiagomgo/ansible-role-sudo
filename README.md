@@ -6,7 +6,7 @@ This role installs sudo and configure it by user.
 
 ## Requirements
 
-None.
+This role only requires Ansible version 1.8+.
 
 ## Role Variables
 
