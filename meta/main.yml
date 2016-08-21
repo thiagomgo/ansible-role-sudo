@@ -1,6 +1,6 @@
 galaxy_info:
   author: thiagomgo
-  description: An simple ansible role to manage sudo users
+  description: A simple ansible role to manage sudo users
   company:
   license: "license (BSD, MIT)"
   min_ansible_version: 1.8
