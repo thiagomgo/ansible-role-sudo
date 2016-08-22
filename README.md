@@ -43,7 +43,7 @@ None
       - username
 
   roles:
-    - thiagomgo.sudo
+    - ansible-role-sudo
 ```
 
 ## License
