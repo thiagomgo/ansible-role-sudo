@@ -11,4 +11,4 @@
       - root
 
   roles:
-    - ansible-role-sudo
+    - role_under_test

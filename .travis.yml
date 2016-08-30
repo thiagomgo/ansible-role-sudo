@@ -1,5 +1,4 @@
 ---
-dist: trusty
 sudo: required
 
 language: python
@@ -9,58 +8,66 @@ branches:
   only:
     - master
 
-# Install ansible
-addons:
-  apt:
-    packages:
-    - python-pip
-
 env:
-  - ANSIBLE_VERSION=latest
-  - ANSIBLE_VERSION=2.1.0.0
-  - ANSIBLE_VERSION=2.0.2.0
-  - ANSIBLE_VERSION=2.0.1.0
-  - ANSIBLE_VERSION=2.0.0.2
-  - ANSIBLE_VERSION=2.0.0.1
-  - ANSIBLE_VERSION=2.0.0.0
-  - ANSIBLE_VERSION=1.9.6
-  - ANSIBLE_VERSION=1.9.5
-  - ANSIBLE_VERSION=1.9.4
-  - ANSIBLE_VERSION=1.9.3
-  - ANSIBLE_VERSION=1.9.2
-  - ANSIBLE_VERSION=1.9.1
-  - ANSIBLE_VERSION=1.9.0.1
-  - ANSIBLE_VERSION=1.8.4
-  - ANSIBLE_VERSION=1.8.3
-  - ANSIBLE_VERSION=1.8.2
-  - ANSIBLE_VERSION=1.8.1
-  - ANSIBLE_VERSION=1.8
+  global:
+    # https://github.com/travis-ci/travis-ci/issues/6461#issuecomment-239577306
+    - DOCKER_VERSION=1.9.1-0~trusty
+    - CONTAINER_ID=$(mktemp)
+    - IDEMPOTENCE=$(mktemp)
 
-install:
-  # Install ansible
-  - if [ "$ANSIBLE_VERSION" = "latest" ]; then pip install --no-binary ansible ansible; else pip install --no-binary ansible ansible==$ANSIBLE_VERSION; fi
-  - pip install ansible
+  matrix:
+    - distribution: centos
+      version: 7
+      init: /usr/lib/systemd/systemd
+      run_opts: "--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro"
+    - distribution: centos
+      version: 6
+      init: /sbin/init
+      run_opts: ""
+    - distribution: ubuntu
+      version: 14.04
+      init: /sbin/init
+      run_opts: ""
+    - distribution: ubuntu
+      version: 12.04
+      init: /sbin/init
+      run_opts: ""
 
-  # Check ansible version
-  - ansible --version
+services:
+  - docker
 
-  # Create ansible.cfg with correct roles_path
-  - echo -e 'localhost  ansible_connection=local' > tests/inventory
-  - echo -e '[defaults]\nroles_path = ../\nhostfile = ./tests/inventory' > ansible.cfg
+before_install:
+  # Downgrade to specific version of Docker engine.
+  - sudo apt-get update -qq
+  - sudo apt-get remove docker-engine -yq
+  - sudo apt-get install docker-engine=$DOCKER_VERSION -yq --no-install-suggests --no-install-recommends --force-yes -o Dpkg::Options::="--force-confnew"
+
+  # Pull container
+  - 'sudo docker pull ${distribution}:${version}'
+
+  # Customize containers
+  - 'sudo docker build --rm=true --file=tests/Dockerfile.${distribution}-${version} --tag=${distribution}-${version}:ansible tests'
 
 script:
-  # Basic role syntax check
-  - ansible-playbook --sudo tests/test.yml -i tests/inventory --syntax-check
+  # Run container in detached state
+  - 'sudo docker run --detach --privileged --volume="${PWD}":/etc/ansible/roles/role_under_test:ro ${run_opts} ${distribution}-${version}:ansible "${init}" > "${CONTAINER_ID}"'
 
-  # Run the role/playbook with ansible-playbook.
-  - ansible-playbook --sudo tests/test.yml -vvvv
+  # Ansible syntax check.
+  - 'sudo docker exec --tty "$(cat ${CONTAINER_ID})" env TERM=xterm ansible-playbook /etc/ansible/roles/role_under_test/tests/test.yml --syntax-check'
 
-  # Run the role/playbook again, checking to make sure it's idempotent
+  # Test role.
+  - 'sudo docker exec --tty "$(cat ${CONTAINER_ID})" env TERM=xterm ansible-playbook /etc/ansible/roles/role_under_test/tests/test.yml'
+
+  # Test role idempotence.
+  - sudo docker exec "$(cat ${CONTAINER_ID})" ansible-playbook /etc/ansible/roles/role_under_test/tests/test.yml | tee -a ${IDEMPOTENCE}
   - >
-      ansible-playbook --sudo tests/test.yml
-      | grep -q 'changed=0.*failed=0'
-      && (echo 'Idempotence test: pass' && exit 0)
-      || (echo 'Idempotence test: fail' && exit 1)
+    tail ${IDEMPOTENCE}
+    | grep -q 'changed=0.*failed=0'
+    && (echo 'Idempotence test: pass' && exit 0)
+    || (echo 'Idempotence test: fail' && exit 1)
+
+  # Clean up
+  - 'sudo docker stop "$(cat ${CONTAINER_ID})"'
 
 notifications:
   email: false
