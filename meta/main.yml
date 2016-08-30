@@ -1,14 +1,17 @@
 galaxy_info:
-  author: thiagomgo
+  author: Thiago Gomes (thiagomgo)
   description: A simple ansible role to manage sudo users
   company:
   license: "license (BSD, MIT)"
-  min_ansible_version: 1.8
+  min_ansible_version: 1.9
   platforms:
     - name: EL
       versions:
       - all
     - name: Debian
+      versions:
+      - all
+    - name: Ubuntu
       versions:
       - all
   galaxy_tags:
